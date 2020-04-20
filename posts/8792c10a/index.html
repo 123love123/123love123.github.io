@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="zh-CN,en,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"trhsy.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="前言很久之前整理的小东西，这个是从我个人博客网站拷过来的地址">
+<meta property="og:type" content="article">
+<meta property="og:title" content="飞机大战源码">
+<meta property="og:url" content="https://trhsy.github.io/posts/8792c10a/index.html">
+<meta property="og:site_name" content="Trhsy">
+<meta property="og:description" content="前言很久之前整理的小东西，这个是从我个人博客网站拷过来的地址">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-04-20T08:24:27.786Z">
+<meta property="article:modified_time" content="2020-04-20T08:24:27.786Z">
+<meta property="article:author" content="Trhsy">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="源码">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://trhsy.github.io/posts/8792c10a/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>飞机大战源码 | Trhsy</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?4G1r7N2b1UofcDFO# <app_id>";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Trhsy</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Trhsy</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">29</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">20</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">23</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9zaG9wMTU1Mzc4NDcwLnRhb2Jhby5jb20=" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://trhsy.github.io/posts/8792c10a/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/auser.jpg">
+      <meta itemprop="name" content="Trhsy">
+      <meta itemprop="description" content="trhsy,她如花似玉,範範的博客,嫣然De小店,java,hexo,git">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Trhsy">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          飞机大战源码
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-20 16:24:27" itemprop="dateCreated datePublished" datetime="2020-04-20T16:24:27+08:00">2020-04-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/posts/8792c10a/" class="post-meta-item leancloud_visitors" data-flag-title="飞机大战源码" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/posts/8792c10a/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/posts/8792c10a/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>很久之前整理的小东西，这个是从我个人博客网站拷过来的<a href="https://trhsy.github.io/aircraft_war.html">地址</a></p>
+<a id="more"></a>
+
+<p>下面是源码</p>
+<h1 id="Plane"><a href="#Plane" class="headerlink" title="Plane"></a>Plane</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.trhsy.cn.plane;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.imageio.ImageIO;</span><br><span class="line"><span class="keyword">import</span> java.awt.*;</span><br><span class="line"><span class="keyword">import</span> java.awt.event.KeyEvent;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@ClassName</span> Plane</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span> todo</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> Administrator</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2020/3/24 002415:03</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Plane</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Author</span> fan</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Description</span> //TODO 定义一个飞机</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Date</span> 15:07 2020/3/24 0024</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Param</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    Image planeImage = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> x = <span class="number">300</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> y = <span class="number">700</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> lifeCount = <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Author</span> fan</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Description</span> //TODO 给飞机附图片</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Date</span> 15:19 2020/3/24 0024</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Param</span> []</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Plane</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            planeImage = ImageIO.read(Plane.class.getClassLoader().getResourceAsStream("images/plane.png"));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">(Graphics g)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 画飞机图片</span></span><br><span class="line">        g.drawImage(planeImage, x, y, <span class="keyword">null</span>);</span><br><span class="line">        <span class="comment">// 飞机移动</span></span><br><span class="line">        <span class="keyword">this</span>.move();</span><br><span class="line">        <span class="comment">// 血条</span></span><br><span class="line">        <span class="keyword">if</span> (lifeCount &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            g.setColor(Color.WHITE);</span><br><span class="line">            g.fillRect(<span class="number">20</span>, <span class="number">80</span>, <span class="number">100</span>, <span class="number">10</span>);</span><br><span class="line">            g.setColor(Color.red);</span><br><span class="line">            g.fillRect(<span class="number">20</span>, <span class="number">80</span>, (<span class="number">100</span> / <span class="number">5</span>) * lifeCount, <span class="number">10</span>);</span><br><span class="line">            g.setColor(Color.blue);</span><br><span class="line">            g.setFont(<span class="keyword">new</span> Font(<span class="string">"幼圆"</span>, Font.BOLD, <span class="number">30</span>));</span><br><span class="line">            g.drawString(<span class="string">"Score:"</span> + Play.count, <span class="number">20</span>, <span class="number">60</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">move</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isUP &amp;&amp; !isDown &amp;&amp; !isLeft &amp;&amp; !isRight) &#123;</span><br><span class="line">            <span class="comment">//上</span></span><br><span class="line">            y = y - <span class="number">5</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!isUP &amp;&amp; isDown &amp;&amp; !isLeft &amp;&amp; !isRight) &#123;</span><br><span class="line">            <span class="comment">//下</span></span><br><span class="line">            y = y + <span class="number">5</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!isUP &amp;&amp; !isDown &amp;&amp; isLeft &amp;&amp; !isRight) &#123;</span><br><span class="line">            <span class="comment">//左</span></span><br><span class="line">            x = x - <span class="number">5</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!isUP &amp;&amp; !isDown &amp;&amp; !isLeft &amp;&amp; isRight) &#123;</span><br><span class="line">            <span class="comment">//右</span></span><br><span class="line">            x = x + <span class="number">5</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isUP &amp;&amp; !isDown &amp;&amp; isLeft &amp;&amp; !isRight) &#123;</span><br><span class="line">            <span class="comment">//左上</span></span><br><span class="line">            x = x - <span class="number">5</span>;</span><br><span class="line">            y = y - <span class="number">5</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!isUP &amp;&amp; isDown &amp;&amp; isLeft &amp;&amp; !isRight) &#123;</span><br><span class="line">            <span class="comment">//左下</span></span><br><span class="line">            x = x - <span class="number">5</span>;</span><br><span class="line">            y = y + <span class="number">5</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isUP &amp;&amp; !isDown &amp;&amp; !isLeft &amp;&amp; isRight) &#123;</span><br><span class="line">            <span class="comment">//右上</span></span><br><span class="line">            x = x + <span class="number">5</span>;</span><br><span class="line">            y = y - <span class="number">5</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!isUP &amp;&amp; isDown &amp;&amp; !isLeft &amp;&amp; isRight) &#123;</span><br><span class="line">            <span class="comment">//右下</span></span><br><span class="line">            x = x + <span class="number">5</span>;</span><br><span class="line">            y = y + <span class="number">5</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">boolean</span> isUP = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">boolean</span> isDown = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">boolean</span> isLeft = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">boolean</span> isRight = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Author</span> fan</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Description</span> //TODO 按下</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Date</span> 15:21 2020/3/24 0024</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Param</span> [e]</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">keyPressed</span><span class="params">(KeyEvent e)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> keyCode = e.getKeyCode();</span><br><span class="line">        <span class="keyword">if</span> (keyCode == KeyEvent.VK_RIGHT || keyCode == KeyEvent.VK_D) &#123;</span><br><span class="line">            isRight = <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (keyCode == KeyEvent.VK_LEFT || keyCode == KeyEvent.VK_A) &#123;</span><br><span class="line">            isLeft = <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (keyCode == KeyEvent.VK_UP || keyCode == KeyEvent.VK_W) &#123;</span><br><span class="line">            isUP = <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (keyCode == KeyEvent.VK_DOWN || keyCode == KeyEvent.VK_S) &#123;</span><br><span class="line">            isDown = <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Author</span> fan</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Description</span> //TODO 松开</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Date</span> 15:24 2020/3/24 0024</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Param</span> [e]</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">keyReleased</span><span class="params">(KeyEvent e)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> keyCode = e.getKeyCode();</span><br><span class="line">        <span class="keyword">if</span> (keyCode == KeyEvent.VK_RIGHT || keyCode == KeyEvent.VK_D) &#123;</span><br><span class="line">            isRight = <span class="keyword">false</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (keyCode == KeyEvent.VK_LEFT || keyCode == KeyEvent.VK_A) &#123;</span><br><span class="line">            isLeft = <span class="keyword">false</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (keyCode == KeyEvent.VK_UP || keyCode == KeyEvent.VK_W) &#123;</span><br><span class="line">            isUP = <span class="keyword">false</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (keyCode == KeyEvent.VK_DOWN || keyCode == KeyEvent.VK_S) &#123;</span><br><span class="line">            isDown = <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Rectangle <span class="title">getRectangle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Rectangle(x, y, planeImage.getWidth(<span class="keyword">null</span>), planeImage.getHeight(<span class="keyword">null</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="PlaneStatus类"><a href="#PlaneStatus类" class="headerlink" title="PlaneStatus类"></a>PlaneStatus类</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.trhsy.cn.util;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@ClassName</span> PlaneStatus</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span> todo 0 游戏开始前 1 第一关 -1 游戏结束</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> Administrator</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2020/3/24 002415:28</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PlaneStatus</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> roleNum = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> playStatus = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Power类"><a href="#Power类" class="headerlink" title="Power类"></a>Power类</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.trhsy.cn.power;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.imageio.ImageIO;</span><br><span class="line"><span class="keyword">import</span> java.awt.*;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@ClassName</span> Power</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span> todo 血瓶类</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> Administrator</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2020/3/24 002415:29</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Power</span> </span>&#123;</span><br><span class="line">    Image PowerImage = <span class="keyword">null</span>;</span><br><span class="line">    <span class="comment">//初始位置</span></span><br><span class="line">    <span class="keyword">int</span> x = <span class="number">20</span>;</span><br><span class="line">    <span class="keyword">int</span> y = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Power</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.x = (<span class="keyword">int</span>) (Math.random() * <span class="number">540</span>) + <span class="number">20</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            PowerImage = ImageIO.read(Gift<span class="class">.<span class="keyword">class</span>.<span class="title">getClassLoader</span>()</span></span><br><span class="line">                    .getResourceAsStream("images/power.png"));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">(Graphics g)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 画血瓶图片</span></span><br><span class="line">        g.drawImage(PowerImage, x, y, <span class="keyword">null</span>);</span><br><span class="line">        <span class="comment">// 血瓶移动</span></span><br><span class="line">        y++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Rectangle <span class="title">getRectangle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Rectangle(x, y, PowerImage.getWidth(<span class="keyword">null</span>), PowerImage.getHeight(<span class="keyword">null</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Gift"><a href="#Gift" class="headerlink" title="Gift"></a>Gift</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.trhsy.cn.power;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.awt.Graphics;</span><br><span class="line"><span class="keyword">import</span> java.awt.Image;</span><br><span class="line"><span class="keyword">import</span> java.awt.Rectangle;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> javax.imageio.ImageIO;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Gift</span> </span>&#123;</span><br><span class="line">    Image GiftImage = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">int</span> x = <span class="number">20</span>;</span><br><span class="line">    <span class="keyword">int</span> y = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Gift</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.x = (<span class="keyword">int</span>) (Math.random() * <span class="number">540</span>) + <span class="number">20</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            GiftImage = ImageIO.read(Gift<span class="class">.<span class="keyword">class</span>.<span class="title">getClassLoader</span>()</span></span><br><span class="line">                    .getResourceAsStream("images/blood.png"));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">(Graphics g)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 画血瓶图片</span></span><br><span class="line">        g.drawImage(GiftImage, x, y, <span class="keyword">null</span>);</span><br><span class="line">        <span class="comment">// 血瓶移动</span></span><br><span class="line">        y++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Rectangle <span class="title">getRectangle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Rectangle(x, y, GiftImage.getWidth(<span class="keyword">null</span>), GiftImage.getHeight(<span class="keyword">null</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Diji"><a href="#Diji" class="headerlink" title="Diji"></a>Diji</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.trhsy.cn.plane;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.awt.Graphics;</span><br><span class="line"><span class="keyword">import</span> java.awt.Image;</span><br><span class="line"><span class="keyword">import</span> java.awt.Rectangle;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> javax.imageio.ImageIO;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Diji</span> </span>&#123;</span><br><span class="line">    Image dijiImage = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> y = -<span class="number">20</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *20 ~ 760</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> x = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> r;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Diji</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.x = (<span class="keyword">int</span>) (Math.random() * <span class="number">540</span>) + <span class="number">40</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            r = (<span class="keyword">int</span>) (Math.random() * <span class="number">3</span>) + <span class="number">1</span>;</span><br><span class="line">            dijiImage = ImageIO.read(Diji<span class="class">.<span class="keyword">class</span>.<span class="title">getClassLoader</span>()</span></span><br><span class="line">                    .getResourceAsStream("images/diji_" + r + ".png"));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">(Graphics g)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//画 敌机图片</span></span><br><span class="line">        g.drawImage(dijiImage, x, y, <span class="keyword">null</span>);</span><br><span class="line">        <span class="comment">//敌机移动</span></span><br><span class="line">        <span class="keyword">if</span> (r == <span class="number">1</span>) &#123;</span><br><span class="line">            y += <span class="number">4</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (r == <span class="number">2</span>) &#123;</span><br><span class="line">            y += <span class="number">4</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (r == <span class="number">3</span>) &#123;</span><br><span class="line">            y += <span class="number">7</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Rectangle <span class="title">getRectangle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Rectangle(x, y, dijiImage.getWidth(<span class="keyword">null</span>), dijiImage.getHeight(<span class="keyword">null</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="play类"><a href="#play类" class="headerlink" title="play类"></a>play类</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.trhsy.cn.plane;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.trhsy.cn.bullet.DijiZiDan;</span><br><span class="line"><span class="keyword">import</span> com.trhsy.cn.bullet.MyZiDan;</span><br><span class="line"><span class="keyword">import</span> com.trhsy.cn.power.Gift;</span><br><span class="line"><span class="keyword">import</span> com.trhsy.cn.power.Power;</span><br><span class="line"><span class="keyword">import</span> com.trhsy.cn.util.PlaneStatus;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.imageio.ImageIO;</span><br><span class="line"><span class="keyword">import</span> java.awt.*;</span><br><span class="line"><span class="keyword">import</span> java.awt.event.KeyEvent;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@ClassName</span> Play</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span> todo</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> Administrator</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2020/3/24 002415:40</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Play</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">    Image bgImage = <span class="keyword">null</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Author</span> fan</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Description</span> //TODO 战机</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Date</span> 16:11 2020/3/24 0024</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Param</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    Plane plane = <span class="keyword">new</span> Plane();</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Author</span> fan</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Description</span> //TODO 战机子弹</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Date</span> 16:11 2020/3/24 0024</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Param</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    List&lt;MyZiDan&gt; mzds = <span class="keyword">new</span> ArrayList&lt;MyZiDan&gt;();</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Author</span> fan</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Description</span> //TODO 敌机</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Date</span> 16:11 2020/3/24 0024</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Param</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    List&lt;Diji&gt; dijis = <span class="keyword">new</span> ArrayList&lt;Diji&gt;();</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Author</span> fan</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Description</span> //TODO 敌机子弹</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Date</span> 16:11 2020/3/24 0024</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Param</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    List&lt;DijiZiDan&gt; dijizidans = <span class="keyword">new</span> ArrayList&lt;DijiZiDan&gt;();</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Author</span> fan</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Description</span> //TODO 血瓶</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Date</span> 16:11 2020/3/24 0024</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Param</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    List&lt;Gift&gt; gifts = <span class="keyword">new</span> ArrayList&lt;Gift&gt;();</span><br><span class="line"></span><br><span class="line">    List&lt;Power&gt; powers = <span class="keyword">new</span> ArrayList&lt;Power&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Play</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            bgImage = ImageIO.read(Play.class.getClassLoader().getResourceAsStream("images/bg_01.jpg"));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> bgY1 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> bgY2 = -<span class="number">600</span>;</span><br><span class="line">    <span class="keyword">int</span> fireTime = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">boolean</span> flag = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">(Graphics g)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 画背景图片</span></span><br><span class="line">        g.drawImage(bgImage, <span class="number">0</span>, bgY1, <span class="keyword">null</span>);</span><br><span class="line">        bgY1 += <span class="number">5</span>;</span><br><span class="line">        bgY1 = <span class="number">0</span>;</span><br><span class="line">        g.drawImage(bgImage, <span class="number">0</span>, bgY2, <span class="keyword">null</span>);</span><br><span class="line">        bgY2 += <span class="number">5</span>;</span><br><span class="line">        <span class="keyword">if</span> (bgY2 &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            bgY2 = -<span class="number">600</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 清理战机子弹</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; mzds.size(); i++) &#123;</span><br><span class="line">            MyZiDan myZidan = mzds.get(i);</span><br><span class="line">            <span class="keyword">if</span> (myZidan.x &gt; <span class="number">800</span>) &#123;</span><br><span class="line">                mzds.remove(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 添加子弹</span></span><br><span class="line">        <span class="keyword">if</span> (isFire1 == <span class="keyword">true</span> &amp;&amp; flag == <span class="keyword">false</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (fireTime % <span class="number">8</span> == <span class="number">0</span>) &#123;</span><br><span class="line">                mzds.add(<span class="keyword">new</span> MyZiDan(plane.x + <span class="number">25</span>, plane.y + <span class="number">0</span>));</span><br><span class="line">            &#125;</span><br><span class="line">            fireTime++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (isFire1 == <span class="keyword">true</span> &amp;&amp; flag == <span class="keyword">true</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (fireTime % <span class="number">4</span> == <span class="number">0</span>) &#123;</span><br><span class="line">            &#125;</span><br><span class="line">            mzds.add(<span class="keyword">new</span> MyZiDan(plane.x + <span class="number">8</span>, plane.y + <span class="number">0</span>));</span><br><span class="line">            mzds.add(<span class="keyword">new</span> MyZiDan(plane.x + <span class="number">52</span>, plane.y + <span class="number">0</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        fireTime++;</span><br><span class="line">        <span class="comment">// 画战机子弹</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; mzds.size(); i++) &#123;</span><br><span class="line">            MyZiDan myZidan = mzds.get(i);</span><br><span class="line">            myZidan.draw(g);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 清理敌机</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; dijis.size(); i++) &#123;</span><br><span class="line">            Diji dj = dijis.get(i);</span><br><span class="line">            <span class="keyword">if</span> (dj.x &lt; -<span class="number">100</span>) &#123;</span><br><span class="line">                dijis.remove(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 抽奖:添加敌机</span></span><br><span class="line">        dijis.add(<span class="keyword">new</span> Diji());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 抽奖：添加血瓶</span></span><br><span class="line">        <span class="keyword">if</span> ((<span class="keyword">int</span>) (Math.random() * <span class="number">1000</span>) == <span class="number">5</span>) &#123;</span><br><span class="line">            gifts.add(<span class="keyword">new</span> Gift());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; gifts.size(); i++) &#123;</span><br><span class="line">            Gift gift = gifts.get(i);</span><br><span class="line">            gift.draw(g);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//抽奖：添加power</span></span><br><span class="line">        <span class="keyword">if</span> ((<span class="keyword">int</span>) (Math.random() * <span class="number">1000</span>) == <span class="number">5</span>) &#123;</span><br><span class="line">            powers.add(<span class="keyword">new</span> Power());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; powers.size(); i++) &#123;</span><br><span class="line">            Power power = powers.get(i);</span><br><span class="line">            power.draw(g);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 画敌机</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; dijis.size(); i++) &#123;</span><br><span class="line">            Diji dj = dijis.get(i);</span><br><span class="line">            dj.draw(g);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 画飞机</span></span><br><span class="line">        plane.draw(g);</span><br><span class="line">        <span class="comment">// 判断战机相撞</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; dijis.size(); i++) &#123;</span><br><span class="line">            <span class="comment">// 先得到每一个敌机</span></span><br><span class="line">            Diji dj = dijis.get(i);</span><br><span class="line">            Rectangle r1 = dj.getRectangle();</span><br><span class="line">            Rectangle r2 = plane.getRectangle();</span><br><span class="line">            <span class="keyword">if</span> (r1.intersects(r2)) &#123;</span><br><span class="line">                dijis.remove(i);</span><br><span class="line">                plane.lifeCount = plane.lifeCount - <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">if</span> (plane.lifeCount &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                    flag = <span class="keyword">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (plane.lifeCount &lt; <span class="number">1</span>) &#123;</span><br><span class="line">                    PlaneStatus.playStatus = -<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 判断战机和血瓶相撞</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> q = <span class="number">0</span>; q &lt; gifts.size(); q++) &#123;</span><br><span class="line">                <span class="comment">// 先得到每一个血瓶</span></span><br><span class="line">                Gift gift = gifts.get(q);</span><br><span class="line">                Rectangle rectangle = gift.getRectangle();</span><br><span class="line">                Rectangle rectangle1 = plane.getRectangle();</span><br><span class="line">                <span class="keyword">if</span> (rectangle.intersects(rectangle1)) &#123;</span><br><span class="line">                    gifts.remove(q);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (plane.lifeCount &lt; <span class="number">5</span>) &#123;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                plane.lifeCount = plane.lifeCount + <span class="number">1</span>;</span><br><span class="line">                <span class="comment">//// 判断战机和Power相撞</span></span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> w = <span class="number">0</span>; w &lt; powers.size(); w++) &#123;</span><br><span class="line">                    <span class="comment">// 先得到每一个power</span></span><br><span class="line">                    Power power = powers.get(w);</span><br><span class="line">                    Rectangle rectangle2 = power.getRectangle();</span><br><span class="line">                    Rectangle rectangle3 = plane.getRectangle();</span><br><span class="line">                    <span class="keyword">if</span> (rectangle2.intersects(rectangle3)) &#123;</span><br><span class="line">                        powers.remove(w);</span><br><span class="line">                        flag = <span class="keyword">true</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 判断敌机在中弹</span></span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> e = <span class="number">0</span>; e &lt; mzds.size(); e++) &#123;</span><br><span class="line">                    <span class="comment">// 得到每个战机子弹</span></span><br><span class="line">                    MyZiDan myzidan = mzds.get(e);</span><br><span class="line">                    Rectangle rectangle2 = myzidan.getRectangle();</span><br><span class="line">                    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; dijis.size(); j++) &#123;</span><br><span class="line">                        <span class="comment">// 每一个敌机</span></span><br><span class="line">                        Diji diji = dijis.get(j);</span><br><span class="line">                        Rectangle rectangle3 = diji.getRectangle();</span><br><span class="line">                        <span class="keyword">if</span> (rectangle2.intersects(rectangle3)) &#123;</span><br><span class="line">                            mzds.remove(i);</span><br><span class="line">                            dijis.remove(j);</span><br><span class="line">                            count++;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">boolean</span> isFire1 = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">boolean</span> isFire2 = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">keyPressed</span><span class="params">(KeyEvent e)</span> </span>&#123;</span><br><span class="line">        plane.keyPressed(e);</span><br><span class="line">        <span class="keyword">if</span> (e.getKeyCode() == KeyEvent.VK_J) &#123;</span><br><span class="line">            isFire1 = <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="comment">/*if (e.getKeyCode() == KeyEvent.VK_K) &#123; isFire2 = true; &#125;*/</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">keyReleased</span><span class="params">(KeyEvent e)</span> </span>&#123;</span><br><span class="line">        plane.keyReleased(e);</span><br><span class="line">        <span class="keyword">if</span> (e.getKeyCode() == KeyEvent.VK_J) &#123;</span><br><span class="line">            isFire1 = <span class="keyword">false</span>;</span><br><span class="line">            fireTime = <span class="number">0</span>;</span><br><span class="line">        &#125; <span class="comment">/*if (e.getKeyCode() == KeyEvent.VK_K) &#123; isFire2 = false; fireTime = 0; &#125;*/</span></span><br><span class="line">        <span class="keyword">if</span> (e.getKeyCode() == KeyEvent.VK_P) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; dijis.size(); i++) &#123;</span><br><span class="line">                dijis.remove(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="over类"><a href="#over类" class="headerlink" title="over类"></a>over类</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.trhsy.cn.util;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.imageio.ImageIO;</span><br><span class="line"><span class="keyword">import</span> java.awt.*;</span><br><span class="line"><span class="keyword">import</span> java.awt.event.KeyEvent;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@ClassName</span> Over</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span> todo</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> Administrator</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2020/3/24 002416:03</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Over</span> </span>&#123;</span><br><span class="line">    Image obg=<span class="keyword">null</span>;</span><br><span class="line">    Image ng=<span class="keyword">null</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Over</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            obg=ImageIO.read(Before.class.getClassLoader().getResourceAsStream("images/obg.jpg"));</span><br><span class="line">            ng=ImageIO.read(Before.class.getClassLoader().getResourceAsStream("images/ng.png")); &#125; catch (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">(Graphics g)</span></span>&#123;</span><br><span class="line">        g.drawImage(obg, <span class="number">0</span>, <span class="number">0</span>, <span class="keyword">null</span>);</span><br><span class="line">        g.drawImage(ng, <span class="number">120</span>,<span class="number">100</span>, <span class="keyword">null</span>);</span><br><span class="line">        g.setColor(Color.black);</span><br><span class="line">        g.setFont(<span class="keyword">new</span> Font(<span class="string">"幼圆"</span>, Font.BOLD, <span class="number">40</span>));</span><br><span class="line">        g.drawString(<span class="string">"游戏结束啦！"</span>,<span class="number">200</span> ,<span class="number">600</span> );</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">keyPressed</span><span class="params">(KeyEvent e)</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">keyReleased</span><span class="params">(KeyEvent e)</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="MainFrame主类"><a href="#MainFrame主类" class="headerlink" title="MainFrame主类"></a>MainFrame主类</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.trhsy.cn.plane.Play;</span><br><span class="line"><span class="keyword">import</span> com.trhsy.cn.util.Before;</span><br><span class="line"><span class="keyword">import</span> com.trhsy.cn.util.Over;</span><br><span class="line"><span class="keyword">import</span> com.trhsy.cn.util.PlaneStatus;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.swing.*;</span><br><span class="line"><span class="keyword">import</span> java.awt.*;</span><br><span class="line"><span class="keyword">import</span> java.awt.event.KeyAdapter;</span><br><span class="line"><span class="keyword">import</span> java.awt.event.KeyEvent;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@ClassName</span> MainFrame</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span> todo</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> Administrator</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2020/3/24 002416:04</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainFrame</span> <span class="keyword">extends</span> <span class="title">JFrame</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">    Before before =<span class="keyword">new</span> Before();</span><br><span class="line">    Play play = <span class="keyword">new</span> Play();</span><br><span class="line">    Over over = <span class="keyword">new</span> Over();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MainFrame</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//设 置标题</span></span><br><span class="line">        <span class="keyword">this</span>.setTitle(<span class="string">" 让子弹飞一会~"</span>);</span><br><span class="line">        <span class="comment">//设置大小</span></span><br><span class="line">        <span class="keyword">this</span>.setSize(<span class="number">600</span>, <span class="number">800</span>);</span><br><span class="line">        <span class="comment">//定位居中</span></span><br><span class="line">        <span class="keyword">this</span>.setLocationRelativeTo(<span class="keyword">null</span>);</span><br><span class="line">        <span class="comment">//添加关闭操作</span></span><br><span class="line">        <span class="keyword">this</span>.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</span><br><span class="line">        <span class="comment">//禁止重置大小z</span></span><br><span class="line">        <span class="keyword">this</span>.setResizable(<span class="keyword">false</span>);</span><br><span class="line">        <span class="comment">//添加键盘监听器 KeyListener --&gt;KeyAdapter</span></span><br><span class="line">        <span class="keyword">this</span>.addKeyListener(<span class="keyword">new</span> KeyAdapter() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">keyPressed</span><span class="params">(KeyEvent e)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">if</span>(PlaneStatus.playStatus == <span class="number">0</span>)&#123;</span><br><span class="line">                    before.keyPressed(e);</span><br><span class="line">                &#125;<span class="keyword">else</span> <span class="keyword">if</span>(PlaneStatus.playStatus ==<span class="number">1</span>)&#123;</span><br><span class="line">                    play.keyPressed(e);</span><br><span class="line">                &#125;<span class="keyword">else</span> <span class="keyword">if</span>(PlaneStatus.playStatus==-<span class="number">1</span>)&#123;</span><br><span class="line">                    over.keyPressed(e);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">keyReleased</span><span class="params">(KeyEvent e)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">if</span>(PlaneStatus.playStatus == <span class="number">0</span>)&#123;</span><br><span class="line">                    before.keyReleased(e);</span><br><span class="line">                &#125;<span class="keyword">else</span> <span class="keyword">if</span>(PlaneStatus.playStatus ==<span class="number">1</span>)&#123;</span><br><span class="line">                    play.keyReleased(e);</span><br><span class="line">                &#125;<span class="keyword">else</span> <span class="keyword">if</span>(PlaneStatus.playStatus==-<span class="number">1</span>)&#123;</span><br><span class="line">                    over.keyReleased(e);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//启 动一个线程:每隔20 毫秒执行一次</span></span><br><span class="line">        <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">                <span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">                    MainFrame.<span class="keyword">this</span>.repaint();</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        Thread.sleep(<span class="number">20</span>);</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;.start(); <span class="comment">//显示</span></span><br><span class="line">        <span class="keyword">this</span>.setVisible(<span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    Image bufferImage =<span class="keyword">null</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Author</span> fan</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Description</span> //TODO 这个方法也是20毫秒执行一次</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Date</span> 16:10 2020/3/24 0024</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Param</span> [g]</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">paint</span><span class="params">(Graphics g)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(bufferImage==<span class="keyword">null</span>)&#123;</span><br><span class="line">            bufferImage = <span class="keyword">this</span>.createImage(<span class="number">600</span>, <span class="number">800</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        Graphics g4Image = bufferImage.getGraphics();</span><br><span class="line">        g4Image.setColor(Color.BLACK);</span><br><span class="line">        g4Image.fillRect(<span class="number">0</span>, <span class="number">0</span>, <span class="number">600</span>, <span class="number">800</span>);</span><br><span class="line">        <span class="keyword">this</span>.draw(g4Image);</span><br><span class="line">        g.drawImage(bufferImage, <span class="number">0</span>, <span class="number">0</span>, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">(Graphics g)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(PlaneStatus.playStatus == <span class="number">0</span>)&#123;</span><br><span class="line">            before.draw(g);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(PlaneStatus.playStatus ==<span class="number">1</span>)&#123;</span><br><span class="line">            play.draw(g);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(PlaneStatus.playStatus==-<span class="number">1</span>)&#123;</span><br><span class="line">            over.draw(g);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> MainFrame();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="MyZiDan"><a href="#MyZiDan" class="headerlink" title="MyZiDan"></a>MyZiDan</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.trhsy.cn.bullet;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.awt.Graphics;</span><br><span class="line"><span class="keyword">import</span> java.awt.Image;</span><br><span class="line"><span class="keyword">import</span> java.awt.Rectangle;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> javax.imageio.ImageIO;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyZiDan</span> </span>&#123;</span><br><span class="line">    Image zidanImage = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> x;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> y;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyZiDan</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.x = x;</span><br><span class="line">        <span class="keyword">this</span>.y = y;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            zidanImage = ImageIO.read(MyZiDan.class.getClassLoader().getResourceAsStream("images/zidan.png"));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">(Graphics g)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 画我军子弹图片</span></span><br><span class="line">        g.drawImage(zidanImage, x, y, <span class="keyword">null</span>);</span><br><span class="line">        <span class="comment">// 我的飞机子弹移动速度</span></span><br><span class="line">        y -= <span class="number">20</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Rectangle <span class="title">getRectangle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Rectangle(x, y, zidanImage.getWidth(<span class="keyword">null</span>), zidanImage.getHeight(<span class="keyword">null</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="DijiZiDan"><a href="#DijiZiDan" class="headerlink" title="DijiZiDan"></a>DijiZiDan</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.trhsy.cn.bullet;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.awt.Graphics;</span><br><span class="line"><span class="keyword">import</span> java.awt.Image;</span><br><span class="line"><span class="keyword">import</span> java.awt.Rectangle;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> javax.imageio.ImageIO;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DijiZiDan</span> </span>&#123;</span><br><span class="line">    Image zidanImage = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">int</span> x;</span><br><span class="line">    <span class="keyword">int</span> y;</span><br><span class="line">    <span class="keyword">int</span> fangxiang = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DijiZiDan</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.x = x;</span><br><span class="line">        <span class="keyword">this</span>.y = y;</span><br><span class="line">        fangxiang = (<span class="keyword">int</span>) (Math.random() * <span class="number">5</span>);<span class="comment">//0 ~ 7</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            zidanImage = ImageIO.read(DijiZiDan<span class="class">.<span class="keyword">class</span>.<span class="title">getClassLoader</span>()</span></span><br><span class="line">                    .getResourceAsStream("images/dijizidan.jpg"));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">(Graphics g)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//画 敌机子弹图片</span></span><br><span class="line">        g.drawImage(zidanImage, x, y, <span class="keyword">null</span>);</span><br><span class="line">        <span class="comment">//移动</span></span><br><span class="line">        <span class="keyword">this</span>.move();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">move</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (fangxiang == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="comment">//下</span></span><br><span class="line">            y = y + <span class="number">2</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (fangxiang == <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="comment">//左</span></span><br><span class="line">            x = x - <span class="number">2</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (fangxiang == <span class="number">2</span>) &#123;</span><br><span class="line">            <span class="comment">//右</span></span><br><span class="line">            x = x + <span class="number">2</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (fangxiang == <span class="number">3</span>) &#123;</span><br><span class="line">            <span class="comment">//左下</span></span><br><span class="line">            x = x - <span class="number">2</span>;</span><br><span class="line">            y = y + <span class="number">2</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (fangxiang == <span class="number">4</span>) &#123;</span><br><span class="line">            <span class="comment">// 右下</span></span><br><span class="line">            x = x + <span class="number">2</span>;</span><br><span class="line">            y = y + <span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Rectangle <span class="title">getRectangle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Rectangle(x, y, zidanImage.getWidth(<span class="keyword">null</span>), zidanImage.getHeight(<span class="keyword">null</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Before"><a href="#Before" class="headerlink" title="Before"></a>Before</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.trhsy.cn.util;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.awt.Color;</span><br><span class="line"><span class="keyword">import</span> java.awt.Font;</span><br><span class="line"><span class="keyword">import</span> java.awt.Graphics;</span><br><span class="line"><span class="keyword">import</span> java.awt.Image;</span><br><span class="line"><span class="keyword">import</span> java.awt.event.KeyEvent;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> javax.imageio.ImageIO;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> fan</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span> //TODO 游戏开始之前加载</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 16:07 2020/3/24 0024</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Param</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Before</span> </span>&#123;</span><br><span class="line">    Image bg = <span class="keyword">null</span>;</span><br><span class="line">    Image wfeiji = <span class="keyword">null</span>;</span><br><span class="line">    Image kdiji1 = <span class="keyword">null</span>;</span><br><span class="line">    Image kdiji2 = <span class="keyword">null</span>;</span><br><span class="line">    Image kdiji3 = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Before</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            bg = ImageIO.read(Before.class.getClassLoader().getResourceAsStream("images/bg.jpg"));</span><br><span class="line">            wfeiji = ImageIO.read(Before.class.getClassLoader().getResourceAsStream("images/feiji_1.png"));</span><br><span class="line">            kdiji1 = ImageIO.read(Before.class.getClassLoader().getResourceAsStream("images/kdiji_01.png"));</span><br><span class="line">            kdiji2 = ImageIO.read(Before.class.getClassLoader().getResourceAsStream("images/kdiji_02.png"));</span><br><span class="line">            kdiji3 = ImageIO.read(Before.class.getClassLoader().getResourceAsStream("images/kdiji_03.png"));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> time = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">(Graphics g)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (PlaneStatus.roleNum == <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="comment">// 画妹妹</span></span><br><span class="line">            g.drawImage(bg, <span class="number">0</span>, <span class="number">0</span>, <span class="keyword">null</span>);</span><br><span class="line">            g.drawImage(wfeiji, <span class="number">260</span>, <span class="number">600</span>, <span class="keyword">null</span>);</span><br><span class="line">            g.drawImage(kdiji1, <span class="number">200</span>, <span class="number">50</span>, <span class="keyword">null</span>);</span><br><span class="line">            g.drawImage(kdiji1, <span class="number">400</span>, <span class="number">50</span>, <span class="keyword">null</span>);</span><br><span class="line">            g.drawImage(kdiji1, <span class="number">150</span>, <span class="number">480</span>, <span class="keyword">null</span>);</span><br><span class="line">            g.drawImage(kdiji1, <span class="number">400</span>, <span class="number">480</span>, <span class="keyword">null</span>);</span><br><span class="line">            g.drawImage(kdiji2, <span class="number">100</span>, <span class="number">200</span>, <span class="keyword">null</span>);</span><br><span class="line">            g.drawImage(kdiji2, <span class="number">300</span>, <span class="number">100</span>, <span class="keyword">null</span>);</span><br><span class="line">            g.drawImage(kdiji2, <span class="number">480</span>, <span class="number">200</span>, <span class="keyword">null</span>);</span><br><span class="line">            g.drawImage(kdiji3, <span class="number">300</span>, <span class="number">300</span>, <span class="keyword">null</span>);</span><br><span class="line">            g.drawImage(kdiji3, <span class="number">70</span>, <span class="number">400</span>, <span class="keyword">null</span>);</span><br><span class="line">            g.drawImage(kdiji3, <span class="number">510</span>, <span class="number">400</span>, <span class="keyword">null</span>);</span><br><span class="line">            <span class="comment">//画回车符</span></span><br><span class="line">            time++;</span><br><span class="line">            g.setColor(Color.YELLOW);</span><br><span class="line">            g.setFont(<span class="keyword">new</span> Font(<span class="string">"幼圆"</span>, Font.BOLD, <span class="number">30</span>));</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (time &lt;= <span class="number">10</span>) &#123;</span><br><span class="line">            g.drawString(<span class="string">"[Enter]&gt;&gt;"</span>, <span class="number">50</span>, <span class="number">750</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (time &lt;= <span class="number">20</span>) &#123;</span><br><span class="line">            g.drawString(<span class="string">"[Enter] &gt;&gt;"</span>, <span class="number">50</span>, <span class="number">750</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (time &lt;= <span class="number">30</span>) &#123;</span><br><span class="line">            g.drawString(<span class="string">"[Enter] &gt;&gt;"</span>, <span class="number">50</span>, <span class="number">750</span>);</span><br><span class="line">            <span class="keyword">if</span> (time == <span class="number">30</span>) &#123;</span><br><span class="line">                time = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">keyPressed</span><span class="params">(KeyEvent e)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> keyCode = e.getKeyCode();</span><br><span class="line">        <span class="keyword">if</span> (keyCode == KeyEvent.VK_ENTER) &#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (keyCode == KeyEvent.VK_LEFT || keyCode == KeyEvent.VK_RIGHT) &#123;</span><br><span class="line">            PlaneStatus.roleNum = <span class="number">3</span> - PlaneStatus.roleNum;</span><br><span class="line">            <span class="comment">//1~2 互换</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">keyReleased</span><span class="params">(KeyEvent e)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+	<!--文章结束标语-->
+	<div style="text-align:center;color: #ccc;font-size:14px;">
+      ------------- 本文结束 <i class="fa fa-heart-o"></i> 感谢您的阅读-------------
+	</div>
+        <div class="reward-container">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Trhsy 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.jpg" alt="Trhsy 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Trhsy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://trhsy.github.io/posts/8792c10a/" title="飞机大战源码">https://trhsy.github.io/posts/8792c10a/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/trhsy_fan">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat-qcode.jpg">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
+              <a href="/tags/%E6%BA%90%E7%A0%81/" rel="tag"><i class="fa fa-tag"></i> 源码</a>
+          </div>
+
+        
+  <div class="post-widgets">
+    <div class="wp_rating">
+      <div id="wpac-rating"></div>
+    </div>
+  </div>
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/c042c5d3/" rel="prev" title="为你网站添加上评论系统">
+      <i class="fa fa-chevron-left"></i> 为你网站添加上评论系统
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/b55a1469/" rel="next" title="如何为next主题添加不蒜子统计">
+      如何为next主题添加不蒜子统计 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Plane"><span class="nav-number">2.</span> <span class="nav-text">Plane</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PlaneStatus类"><span class="nav-number">3.</span> <span class="nav-text">PlaneStatus类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Power类"><span class="nav-number">4.</span> <span class="nav-text">Power类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Gift"><span class="nav-number">5.</span> <span class="nav-text">Gift</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Diji"><span class="nav-number">6.</span> <span class="nav-text">Diji</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#play类"><span class="nav-number">7.</span> <span class="nav-text">play类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#over类"><span class="nav-number">8.</span> <span class="nav-text">over类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MainFrame主类"><span class="nav-number">9.</span> <span class="nav-text">MainFrame主类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MyZiDan"><span class="nav-number">10.</span> <span class="nav-text">MyZiDan</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DijiZiDan"><span class="nav-number">11.</span> <span class="nav-text">DijiZiDan</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Before"><span class="nav-number">12.</span> <span class="nav-text">Before</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Trhsy"
+      src="/images/auser.jpg">
+  <p class="site-author-name" itemprop="name">Trhsy</p>
+  <div class="site-description" itemprop="description">trhsy,她如花似玉,範範的博客,嫣然De小店,java,hexo,git</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3RyaHN5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;trhsy"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93ZWliby5jb20vMzIxMTY5MTgzNy9wcm9maWxl" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;3211691837&#x2F;profile"><i class="fab fa-weibo fa-fw"></i>Weibo</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9zaG9wMTU1Mzc4NDcwLnRhb2Jhby5jb20vc2hvcC92aWV3X3Nob3AuaHRt" title="Taobao → https:&#x2F;&#x2F;shop155378470.taobao.com&#x2F;shop&#x2F;view_shop.htm"><i class="gift fa-fw"></i>Taobao</span>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">trhsy</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"FHlJsyQS9GAUQY4CCWYDbQDu-gzGzoHsz","app_key":"U6cbW9dzvbLCsRXvlpI3T6A2","server_url":"https://fhljsyqs.lc-cn-n1-shared.com","security":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='170' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/velocity/1.2.1/velocity.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/velocity/1.2.1/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+
+
+  
+
+
+
+  <script>
+  if (CONFIG.page.isPost) {
+    wpac_init = window.wpac_init || [];
+    wpac_init.push({
+      widget: 'Rating',
+      id    : 20442,
+      el    : 'wpac-rating',
+      color : 'fc6423'
+    });
+    (function() {
+      if ('WIDGETPACK_LOADED' in window) return;
+      WIDGETPACK_LOADED = true;
+      var mc = document.createElement('script');
+      mc.type = 'text/javascript';
+      mc.async = true;
+      mc.src = '//embed.widgetpack.com/widget.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+    })();
+  }
+  </script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : true,
+      appId      : 'FHlJsyQS9GAUQY4CCWYDbQDu-gzGzoHsz',
+      appKey     : 'U6cbW9dzvbLCsRXvlpI3T6A2',
+      placeholder: "ヾﾉ≧∀≦)o来啊，快活啊!",
+      avatar     : 'mp',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : 'https://fhljsyqs.lc-cn-n1-shared.com'
+    });
+  }, window.Valine);
+});
+</script>
+
+  
+  <script type="text/javascript" src="/js/dytitle.js"></script>
+<!-- 页面点击小红心 -->
+
+      <script type="text/javascript" src="/js/clicklove.js"></script>
+
+
+
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+</script>
+
+
+<script type="text/javascript">
+<!-- //只在桌面版网页启用特效-->
+var windowWidth = $(window).width();
+console.inof(windowWidth);
+console.inof(windowWidth > 768);
+if (windowWidth > 768) {
+    document.write('<script type="text/javascript" src="/js/sakura.js"><\/script>');
+}
+
+</body>
+
+</html>

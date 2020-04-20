@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="zh-CN,en,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"trhsy.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="为啥不用jsp自定义标签jsp自定义标签很强大，但是只适用于jsp页面，在html中就不行了。 准备，首先需要把springboot1.5.4默认的thymeleaf升级为3.0，不然使用不了也就是springboot1.5.4，thymeleaf3.0在posm.xml文件中插入">
+<meta property="og:type" content="article">
+<meta property="og:title" content="thymeleaf">
+<meta property="og:url" content="https://trhsy.github.io/posts/33db93c3/index.html">
+<meta property="og:site_name" content="Trhsy">
+<meta property="og:description" content="为啥不用jsp自定义标签jsp自定义标签很强大，但是只适用于jsp页面，在html中就不行了。 准备，首先需要把springboot1.5.4默认的thymeleaf升级为3.0，不然使用不了也就是springboot1.5.4，thymeleaf3.0在posm.xml文件中插入">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://trhsy.github.io/img/html01.png">
+<meta property="og:image" content="https://trhsy.github.io/img/tags.png">
+<meta property="article:published_time" content="2020-04-20T08:24:27.783Z">
+<meta property="article:modified_time" content="2020-04-20T08:24:27.783Z">
+<meta property="article:author" content="Trhsy">
+<meta property="article:tag" content="hexo">
+<meta property="article:tag" content="next">
+<meta property="article:tag" content="thymeleaf，springboot">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://trhsy.github.io/img/html01.png">
+
+<link rel="canonical" href="https://trhsy.github.io/posts/33db93c3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>thymeleaf | Trhsy</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?4G1r7N2b1UofcDFO# <app_id>";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Trhsy</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Trhsy</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">29</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">20</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">23</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9zaG9wMTU1Mzc4NDcwLnRhb2Jhby5jb20=" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://trhsy.github.io/posts/33db93c3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/auser.jpg">
+      <meta itemprop="name" content="Trhsy">
+      <meta itemprop="description" content="trhsy,她如花似玉,範範的博客,嫣然De小店,java,hexo,git">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Trhsy">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          thymeleaf
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-20 16:24:27" itemprop="dateCreated datePublished" datetime="2020-04-20T16:24:27+08:00">2020-04-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/thymeleaf/" itemprop="url" rel="index"><span itemprop="name">thymeleaf</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/posts/33db93c3/" class="post-meta-item leancloud_visitors" data-flag-title="thymeleaf" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/posts/33db93c3/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/posts/33db93c3/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="为啥不用jsp自定义标签"><a href="#为啥不用jsp自定义标签" class="headerlink" title="为啥不用jsp自定义标签"></a>为啥不用jsp自定义标签</h1><p>jsp自定义标签很强大，但是只适用于jsp页面，在html中就不行了。</p>
+<p>准备，首先需要把springboot1.5.4默认的thymeleaf升级为3.0，不然使用不了<br>也就是springboot1.5.4，thymeleaf3.0<br>在posm.xml文件中插入</p>
+<a id="more"></a>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.thymeleaf<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>thymeleaf<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.0.11.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.thymeleaf<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>thymeleaf-spring4<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.0.11.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- https://mvnrepository.com/artifact/nz.net.ultraq.thymeleaf/thymeleaf-layout-dialect --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>nz.net.ultraq.thymeleaf<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>thymeleaf-layout-dialect<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里升级很危险，必须所有依赖jar包全部都给下载了</p>
+<p>前面准备好就开始写代码，我直接帖代码</p>
+<h1 id="TagDialect"><a href="#TagDialect" class="headerlink" title="TagDialect"></a>TagDialect</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.thymeleaf.dialect.AbstractProcessorDialect;</span><br><span class="line"><span class="keyword">import</span> org.thymeleaf.processor.IProcessor;</span><br><span class="line"><span class="keyword">import</span> org.thymeleaf.standard.StandardDialect;</span><br><span class="line"><span class="keyword">import</span> org.thymeleaf.standard.processor.StandardXmlNsTagProcessor;</span><br><span class="line"><span class="keyword">import</span> org.thymeleaf.templatemode.TemplateMode;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@ClassName</span> CustomLabel</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span> 按钮权限自定义标签名:tags</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> asus</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> Created by asus on 2018/11/2112:02</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TagDialect</span> <span class="keyword">extends</span> <span class="title">AbstractProcessorDialect</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TagDialect</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(<span class="string">"Tags Dialect"</span>, <span class="string">"tags"</span>, <span class="number">1000</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *<span class="doctag">@Author</span> asus</span></span><br><span class="line"><span class="comment">     *<span class="doctag">@Descript</span>元素处理器：“matter”标签。</span></span><br><span class="line"><span class="comment">     *<span class="doctag">@Date</span> 16:05 2018/11/21</span></span><br><span class="line"><span class="comment">     *<span class="doctag">@Param</span> [s]</span></span><br><span class="line"><span class="comment">     *<span class="doctag">@return</span> java.util.Set&lt;org.thymeleaf.processor.IProcessor&gt;</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Set&lt;IProcessor&gt; <span class="title">getProcessors</span><span class="params">(<span class="keyword">final</span> String dialectPrefix)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> Set&lt;IProcessor&gt; processors = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">        processors.add(<span class="keyword">new</span> DictMyTagProcessor(dialectPrefix));<span class="comment">//添加我们定义的标签</span></span><br><span class="line">        processors.add(<span class="keyword">new</span> StandardXmlNsTagProcessor(TemplateMode.HTML, dialectPrefix));</span><br><span class="line">        <span class="keyword">return</span> processors;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="DictMyTagProcessor"><a href="#DictMyTagProcessor" class="headerlink" title="DictMyTagProcessor"></a>DictMyTagProcessor</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"><span class="keyword">import</span> org.thymeleaf.context.ITemplateContext;</span><br><span class="line"><span class="keyword">import</span> org.thymeleaf.model.IModel;</span><br><span class="line"><span class="keyword">import</span> org.thymeleaf.model.IModelFactory;</span><br><span class="line"><span class="keyword">import</span> org.thymeleaf.model.IProcessableElementTag;</span><br><span class="line"><span class="keyword">import</span> org.thymeleaf.processor.element.AbstractElementTagProcessor;</span><br><span class="line"><span class="keyword">import</span> org.thymeleaf.processor.element.IElementTagStructureHandler;</span><br><span class="line"><span class="keyword">import</span> org.thymeleaf.spring4.context.SpringContextUtils;</span><br><span class="line"><span class="keyword">import</span> org.thymeleaf.templatemode.TemplateMode;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@ClassName</span> DictMyTagProcessor</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span> 按钮权限自定义标签：功能类</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> asus</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> Created by asus on 2018/11/2111:53</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DictMyTagProcessor</span> <span class="keyword">extends</span> <span class="title">AbstractElementTagProcessor</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG_NAME  = <span class="string">"tag"</span>;<span class="comment">//标签名 tag 这个玩意就是 自定义标签的 ： tag， 应该是可以定义多个标签</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> PRECEDENCE = <span class="number">1000</span>;<span class="comment">//优先级</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DictMyTagProcessor</span><span class="params">(<span class="keyword">final</span> String dialectPrefix)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(</span><br><span class="line">                TemplateMode.HTML, <span class="comment">// 此处理器将仅应用于HTML模式</span></span><br><span class="line">                dialectPrefix,<span class="comment">// 要应用于名称的匹配前缀</span></span><br><span class="line">                TAG_NAME, <span class="comment">// 标签名称：匹配此名称的特定标签</span></span><br><span class="line">                <span class="keyword">true</span>,<span class="comment">// 没有应用于标签名的前缀</span></span><br><span class="line">                <span class="keyword">null</span>,<span class="comment">// 无属性名称：将通过标签名称匹配</span></span><br><span class="line">                <span class="keyword">false</span>, <span class="comment">// 没有要应用于属性名称的前缀</span></span><br><span class="line">                PRECEDENCE<span class="comment">// 优先(内部方言自己的优先</span></span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *<span class="doctag">@Author</span> asus</span></span><br><span class="line"><span class="comment">     *<span class="doctag">@Descript</span> context 页面上下文 tag  标签</span></span><br><span class="line"><span class="comment">     *<span class="doctag">@Date</span> 10:27 2018/11/23</span></span><br><span class="line"><span class="comment">     *<span class="doctag">@Param</span> [context, tag, structureHandler]</span></span><br><span class="line"><span class="comment">     *<span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doProcess</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">final</span> ITemplateContext context,</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">final</span> IProcessableElementTag tag,</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">final</span> IElementTagStructureHandler structureHandler)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//获取应用程序上下文。</span></span><br><span class="line">        ApplicationContext appCtx = SpringContextUtils.getApplicationContext(context);</span><br><span class="line">        ZnlyOperatorService znlyOperatorService=appCtx.getBean(ZnlyOperatorService<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        ZnlyUserService znlyUserService=appCtx.getBean(ZnlyUserService<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         *<span class="doctag">@Author</span> asus</span></span><br><span class="line"><span class="comment">         *<span class="doctag">@Descript</span> 从标签读取“menuId”“operatorType”“tabIndex”属性。标签中的这个可选属性将告诉我们需要什么样的数据</span></span><br><span class="line"><span class="comment">         *<span class="doctag">@Date</span> 16:24 2018/11/21</span></span><br><span class="line"><span class="comment">         *<span class="doctag">@Param</span> [context, tag, structureHandler]</span></span><br><span class="line"><span class="comment">         *<span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment">         **/</span></span><br><span class="line">        <span class="keyword">final</span> String  menuId= tag.getAttributeValue(<span class="string">"menuId"</span>);<span class="comment">//菜单id</span></span><br><span class="line">        <span class="keyword">final</span> String  operatorType= tag.getAttributeValue(<span class="string">"operatorType"</span>);<span class="comment">//按钮类型</span></span><br><span class="line">        <span class="keyword">final</span> String  tabIndex= tag.getAttributeValue(<span class="string">"tabIndex"</span>);<span class="comment">//标签页</span></span><br><span class="line">        String roleIds = <span class="string">""</span>;<span class="comment">//角色id</span></span><br><span class="line">        <span class="comment">// 1.创建输出的html的流</span></span><br><span class="line">        StringBuffer sb = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">		<span class="comment">//此处开始替换要输出的内容</span></span><br><span class="line"></span><br><span class="line">        BaseController b=<span class="keyword">new</span> BaseController();</span><br><span class="line">        ZnlyUser znlyUser=b.getUser();</span><br><span class="line">        List&lt;ZnlyRole&gt; znlyRoleList=znlyUserService.findZnlyUserRoleList(znlyUser.getId());<span class="comment">//获取当前用户角色id</span></span><br><span class="line">        <span class="comment">//编译角色id</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; znlyRoleList.size(); i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (i == <span class="number">0</span>) &#123;</span><br><span class="line">                roleIds += znlyRoleList.get(i).getRoleId();</span><br><span class="line">            &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">                roleIds += <span class="string">","</span>+znlyRoleList.get(i).getRoleId();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        List&lt;Map&lt;String, Object&gt;&gt; operList =<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">//获取当前用户的操作</span></span><br><span class="line">        operList = znlyOperatorService.getOptionByPageName(roleIds,menuId,operatorType,tabIndex);</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        String operatorButtonType=<span class="string">"submit"</span>;</span><br><span class="line">        <span class="keyword">if</span>(operatorType.equals(<span class="string">"1"</span>))&#123;</span><br><span class="line">            <span class="keyword">for</span> (Map&lt;String, Object&gt; oper : operList) &#123;<span class="comment">//&lt;button type="submit" class="btn btn-primary"&gt;查询&lt;/button&gt;</span></span><br><span class="line">                Integer buttonType=Integer.parseInt(oper.get(<span class="string">"operator_button_type"</span>).toString());</span><br><span class="line">                <span class="keyword">if</span>(<span class="number">1</span>!=buttonType)&#123;</span><br><span class="line">                    operatorButtonType=<span class="string">"button"</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                sb.append(<span class="string">"&lt;button type='"</span>+operatorButtonType+<span class="string">"' class='btn "</span>+oper.get(<span class="string">"operator_class"</span>)+<span class="string">"'&gt;"</span>+oper.get(<span class="string">"operator_name"</span>)+<span class="string">"&lt;/button&gt;"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(operatorType.equals(<span class="string">"2"</span>))&#123;</span><br><span class="line">            <span class="keyword">for</span> (Map&lt;String, Object&gt; oper : operList) &#123;<span class="comment">//&lt;button type="submit" class="btn btn-primary"&gt;查询&lt;/button&gt;</span></span><br><span class="line">                Integer buttonType=Integer.parseInt(oper.get(<span class="string">"operator_button_type"</span>).toString());</span><br><span class="line">                <span class="keyword">if</span>(<span class="number">1</span>!=buttonType)&#123;</span><br><span class="line">                    operatorButtonType=<span class="string">"button"</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                sb.append(<span class="string">"&lt;button type='"</span>+operatorButtonType+<span class="string">"' class='btn btn-xs "</span>+oper.get(<span class="string">"operator_class"</span>)+<span class="string">"'&gt;"</span>+oper.get(<span class="string">"operator_name"</span>)+<span class="string">"&lt;/button&gt;"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">		<span class="comment">//此处结束替换要输出的内容</span></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         *<span class="doctag">@Author</span> asus</span></span><br><span class="line"><span class="comment">         *<span class="doctag">@Descript</span> 创建将替换自定义标签的DOM结构。logo将显示在“&lt;div&gt;”标签内,因此必须首先创建,然后必须向其中添加一个节点。</span></span><br><span class="line"><span class="comment">         *<span class="doctag">@Date</span> 16:25 2018/11/21</span></span><br><span class="line"><span class="comment">         *<span class="doctag">@Param</span> [context, tag, structureHandler]</span></span><br><span class="line"><span class="comment">         *<span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment">         **/</span></span><br><span class="line">        <span class="keyword">final</span> IModelFactory modelFactory = context.getModelFactory();</span><br><span class="line">        <span class="keyword">final</span> IModel model = modelFactory.createModel();</span><br><span class="line">        model.add(modelFactory.createText(sb));</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         *<span class="doctag">@Author</span> asus</span></span><br><span class="line"><span class="comment">         *<span class="doctag">@Descript</span>指示引擎用指定的模型替换整个元素。</span></span><br><span class="line"><span class="comment">         *<span class="doctag">@Date</span> 16:33 2018/11/21</span></span><br><span class="line"><span class="comment">         *<span class="doctag">@Param</span> [context, tag, structureHandler]</span></span><br><span class="line"><span class="comment">         *<span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment">         **/</span></span><br><span class="line">        structureHandler.replaceWith(model, <span class="keyword">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后在Application.java中添加</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> TagDialect <span class="title">tagDialect</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> TagDialect();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>页面引用<br>在顶部的html中<br><img src="https://trhsy.github.io/img/html01.png" alt="html01"><br><img src="https://trhsy.github.io/img/tags.png" alt="tags"></p>
+<p>这里大家可以看到我是用来shiro的控制，但是没自由找到可以动态显示的，就想起jsp 的自定义标签发现thymeleaf3也有方言就是这样，希望对你有帮助</p>
+<h1 id="2019年8月14日-更新"><a href="#2019年8月14日-更新" class="headerlink" title="2019年8月14日 更新"></a>2019年8月14日 更新</h1><p> 最近使用新的springboot控件，但是原来的springboot1.5.4版本有点老了，怎么办升级嘛！<br>但是之前讲过springboot和thymeleaf3.0的匹配版本很重要经过最终尝试这里使用的springboot版本为<code>2.1.5.RELEASE</code>;</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.thymeleaf<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>thymeleaf<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.0.11.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.thymeleaf<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>thymeleaf-spring5<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.0.11.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- https://mvnrepository.com/artifact/nz.net.ultraq.thymeleaf/thymeleaf-layout-dialect --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>nz.net.ultraq.thymeleaf<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>thymeleaf-layout-dialect<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+	<!--文章结束标语-->
+	<div style="text-align:center;color: #ccc;font-size:14px;">
+      ------------- 本文结束 <i class="fa fa-heart-o"></i> 感谢您的阅读-------------
+	</div>
+        <div class="reward-container">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Trhsy 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.jpg" alt="Trhsy 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Trhsy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://trhsy.github.io/posts/33db93c3/" title="thymeleaf">https://trhsy.github.io/posts/33db93c3/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/trhsy_fan">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat-qcode.jpg">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/hexo/" rel="tag"><i class="fa fa-tag"></i> hexo</a>
+              <a href="/tags/next/" rel="tag"><i class="fa fa-tag"></i> next</a>
+              <a href="/tags/thymeleaf%EF%BC%8Cspringboot/" rel="tag"><i class="fa fa-tag"></i> thymeleaf，springboot</a>
+          </div>
+
+        
+  <div class="post-widgets">
+    <div class="wp_rating">
+      <div id="wpac-rating"></div>
+    </div>
+  </div>
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/cac15163/" rel="prev" title="s3 备份记录">
+      <i class="fa fa-chevron-left"></i> s3 备份记录
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/824257ee/" rel="next" title="TortoiseGit配合git使用">
+      TortoiseGit配合git使用 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#为啥不用jsp自定义标签"><span class="nav-number">1.</span> <span class="nav-text">为啥不用jsp自定义标签</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TagDialect"><span class="nav-number">2.</span> <span class="nav-text">TagDialect</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DictMyTagProcessor"><span class="nav-number">3.</span> <span class="nav-text">DictMyTagProcessor</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2019年8月14日-更新"><span class="nav-number">4.</span> <span class="nav-text">2019年8月14日 更新</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Trhsy"
+      src="/images/auser.jpg">
+  <p class="site-author-name" itemprop="name">Trhsy</p>
+  <div class="site-description" itemprop="description">trhsy,她如花似玉,範範的博客,嫣然De小店,java,hexo,git</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3RyaHN5" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;trhsy"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93ZWliby5jb20vMzIxMTY5MTgzNy9wcm9maWxl" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;3211691837&#x2F;profile"><i class="fab fa-weibo fa-fw"></i>Weibo</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9zaG9wMTU1Mzc4NDcwLnRhb2Jhby5jb20vc2hvcC92aWV3X3Nob3AuaHRt" title="Taobao → https:&#x2F;&#x2F;shop155378470.taobao.com&#x2F;shop&#x2F;view_shop.htm"><i class="gift fa-fw"></i>Taobao</span>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">trhsy</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"FHlJsyQS9GAUQY4CCWYDbQDu-gzGzoHsz","app_key":"U6cbW9dzvbLCsRXvlpI3T6A2","server_url":"https://fhljsyqs.lc-cn-n1-shared.com","security":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='170' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/velocity/1.2.1/velocity.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/velocity/1.2.1/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+
+
+  
+
+
+
+  <script>
+  if (CONFIG.page.isPost) {
+    wpac_init = window.wpac_init || [];
+    wpac_init.push({
+      widget: 'Rating',
+      id    : 20442,
+      el    : 'wpac-rating',
+      color : 'fc6423'
+    });
+    (function() {
+      if ('WIDGETPACK_LOADED' in window) return;
+      WIDGETPACK_LOADED = true;
+      var mc = document.createElement('script');
+      mc.type = 'text/javascript';
+      mc.async = true;
+      mc.src = '//embed.widgetpack.com/widget.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+    })();
+  }
+  </script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : true,
+      appId      : 'FHlJsyQS9GAUQY4CCWYDbQDu-gzGzoHsz',
+      appKey     : 'U6cbW9dzvbLCsRXvlpI3T6A2',
+      placeholder: "ヾﾉ≧∀≦)o来啊，快活啊!",
+      avatar     : 'mp',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : 'https://fhljsyqs.lc-cn-n1-shared.com'
+    });
+  }, window.Valine);
+});
+</script>
+
+  
+  <script type="text/javascript" src="/js/dytitle.js"></script>
+<!-- 页面点击小红心 -->
+
+      <script type="text/javascript" src="/js/clicklove.js"></script>
+
+
+
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+</script>
+
+
+<script type="text/javascript">
+<!-- //只在桌面版网页启用特效-->
+var windowWidth = $(window).width();
+console.inof(windowWidth);
+console.inof(windowWidth > 768);
+if (windowWidth > 768) {
+    document.write('<script type="text/javascript" src="/js/sakura.js"><\/script>');
+}
+
+</body>
+
+</html>
